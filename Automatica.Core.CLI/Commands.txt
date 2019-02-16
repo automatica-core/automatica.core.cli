@@ -1,0 +1,4 @@
+﻿packupdate -V 1.0.0.0 -R win-x64 -P true -C debug -U ./
+
+
+deployupdate -F automatica-update-win-x64-0.4.0.100.zip -A 9B4771F9-411F-4D63-BE4F-AE592A9EB251 -C https://localhost:6001

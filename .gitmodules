@@ -1,0 +1,3 @@
+[submodule "automatica.build"]
+	path = automatica.build
+	url = https://automatica-core.visualstudio.com//automatica/_git/automatica.build

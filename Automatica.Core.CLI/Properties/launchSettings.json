@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Automatica.Core.CLI": {
+      "commandName": "Project",
+      "commandLineArgs": " setversion 0.6.0.239",
+      "workingDirectory": "E:\\dev\\p3\\automatica\\src\\automatica.core"
+    }
+  }
+}
