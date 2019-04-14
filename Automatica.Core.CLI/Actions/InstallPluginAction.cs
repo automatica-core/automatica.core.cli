@@ -12,8 +12,15 @@ namespace Automatica.Core.CLI.Actions
         {
             if(!File.Exists(args.PluginFile))
             {
-                Console.WriteLine($"{args.PluginFile} not found");
-                return;
+                if(!File.Exists(Path.Combine(Environment.CurrentDirectory, args.PluginFile)))
+                {
+                    Console.WriteLine($"{args.PluginFile} not found");
+                    return;
+                }
+                else
+                {
+                    args.PluginFile = Path.Combine(Environment.CurrentDirectory, args.PluginFile);
+                }
             }
 
             var tmpDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
