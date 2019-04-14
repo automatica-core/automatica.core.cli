@@ -2,8 +2,7 @@
   "profiles": {
     "Automatica.Core.CLI": {
       "commandName": "Project",
-      "commandLineArgs": " setversion 0.6.0.239",
-      "workingDirectory": "E:\\dev\\p3\\automatica\\src\\automatica.core"
+      "commandLineArgs": "InstallPlugin -P C:\\dev\\automatica.core\\automatica\\src\\automatica.drivers\\automatica.driver.constants\\P3.Driver.Constants\\P3.Driver.Constants-1.0.0.0.acpkg -I C:\\dev\\automatica.core\\automatica\\src\\automatica.drivers\\automatica.driver.constants\\P3.Driver.Constants\\test"
     }
   }
 }

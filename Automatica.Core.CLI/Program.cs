@@ -139,6 +139,19 @@ namespace Automatica.Core.CLI
             var exitCode = await SetVersionAction.SetMinCoreServerVersionInManifests(args);
             Environment.Exit(exitCode);
         }
+
+        //[ArgActionMethod, ArgDescription("Runs a Automatica driver or rule project")]
+        //public async Task Run(WorkingDirectoryArguments args)
+        //{
+        //    await RunAction.Run(args.WorkingDirectory);
+        //}
+
+
+        [ArgActionMethod, ArgDescription("Installs a plugin in a give directory")]
+        public void InstallPlugin(InstallPluginArgs args)
+        {
+            InstallPluginAction.InstallPlugin(args);
+        }
     }
 
     class Program
