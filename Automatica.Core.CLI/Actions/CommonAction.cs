@@ -42,7 +42,7 @@ namespace Automatica.Core.CLI.Actions
         {
             if (File.Exists(currentDir))
             {
-                var fileInfo = new FileInfo(currentDir));
+                var fileInfo = new FileInfo(currentDir);
 
                 currentDir = fileInfo.DirectoryName;
             }
