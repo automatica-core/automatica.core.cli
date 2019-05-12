@@ -15,7 +15,7 @@ namespace Automatica.Core.CLI.Actions
                 if(!File.Exists(Path.Combine(Environment.CurrentDirectory, args.PluginFile)))
                 {
                     Console.WriteLine($"{args.PluginFile} not found");
-                    return;
+                    throw new FileNotFoundException(args.PluginFile);
                 }
                 else
                 {

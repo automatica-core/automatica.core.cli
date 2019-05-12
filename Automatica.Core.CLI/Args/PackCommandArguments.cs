@@ -12,5 +12,8 @@ namespace Automatica.Core.CLI.Args
 
         [ArgDescription("The package output directory, if not set the working directory will be used")]
         public string OutputDirectory { get; set; }
+
+        [ArgDescription("Defines if you want to automatically update all your Automatica.Core nuget references"), ArgDefaultValue(true)]
+        public bool UpdateNugetPackages { get; set; }
     }
 }
