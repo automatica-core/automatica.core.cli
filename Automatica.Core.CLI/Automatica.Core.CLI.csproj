@@ -35,6 +35,7 @@
   <ItemGroup>
     <PackageReference Include="Automatica.Core.Common.Update" Version="0.9.0.320" />
     <PackageReference Include="Automatica.Core.Driver" Version="0.9.0.320" />
+    <PackageReference Include="NetStandardUtils" Version="1.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="PowerArgs" Version="3.6.0" />
   </ItemGroup>

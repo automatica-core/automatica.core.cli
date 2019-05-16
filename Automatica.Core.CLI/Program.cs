@@ -140,6 +140,12 @@ namespace Automatica.Core.CLI
             Environment.Exit(exitCode);
         }
 
+        [ArgActionMethod, ArgDescription("Prints the current RID to the stdout")]
+        public void PrintRid()
+        {
+            Console.WriteLine($"{NetStandardUtils.Platform.Rid}");
+        }
+
         //[ArgActionMethod, ArgDescription("Runs a Automatica driver or rule project")]
         //public async Task Run(WorkingDirectoryArguments args)
         //{
@@ -160,15 +166,20 @@ namespace Automatica.Core.CLI
         {
             try
             {
-                Console.WriteLine($"Automatica.Core CLI Version {Assembly.GetCallingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion}");
-                await PowerArgs.Args.InvokeActionAsync<AutomaticaCliArgs>(args);
+                if (args.Length > 0 && args[0] != "PrintRid")
+                {
+                    Console.WriteLine($"Automatica.Core CLI Version {NetStandardUtils.Version.GetAssemblyVersion()}");
+                }
+
+                var ret = await PowerArgs.Args.InvokeActionAsync<AutomaticaCliArgs>(args);
+
 
                 if (Debugger.IsAttached)
                 {
                     Console.ReadLine();
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.Error.WriteLine($"{e}");
             }
