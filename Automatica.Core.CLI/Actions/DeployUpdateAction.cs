@@ -25,13 +25,16 @@ namespace Automatica.Core.CLI.Actions
             {
                 MultipartFormDataContent multiContent = new MultipartFormDataContent();
 
-                var httpClientHandler = new HttpClientHandler();
-                httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
+                var httpClientHandler = new HttpClientHandler
+                {
+                    ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+                };
+
                 var client = new HttpClient(httpClientHandler);
 
                 var payload = await File.ReadAllBytesAsync(args.File);
                 multiContent.Add(new ByteArrayContent(payload), "files", args.File); // name must be "files"
-                var cloudUrl = $"{args.CloudUrl}/webapi/v1/coreCliData/deploy/{args.ApiKey}";
+                var cloudUrl = $"{args.CloudUrl}/webapi/v1/coreCliData/deploy/{args.CloudEnvironment}/{args.ApiKey}";
 
                 Console.WriteLine($"Posting to {cloudUrl}");
 
