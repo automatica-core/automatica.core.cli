@@ -39,7 +39,7 @@ namespace Automatica.Core.CLI.Actions
 
                 response.EnsureSuccessStatusCode();
 
-                Console.WriteLine("Upload successfull");
+                Console.WriteLine("Upload successfully");
                 return 0;
             }
             catch(Exception e)

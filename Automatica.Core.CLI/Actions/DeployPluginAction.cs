@@ -49,7 +49,7 @@ namespace Automatica.Core.CLI.Actions
 
                 var payload = await File.ReadAllBytesAsync(args.File);
                 multiContent.Add(new ByteArrayContent(payload), "files", args.File); // name must be "files"
-                var cloudUrl = $"{args.CloudUrl}/webapi/v1/coreCliData/deployPlugin/{args.DeleteOldVersions}/{args.ApiKey}";
+                var cloudUrl = $"{args.CloudUrl}/webapi/v1/coreCliData/deployPlugin/{args.DeleteOldVersions}/{args.ApiKey}/{args.CloudEnvironment}";
 
                 Console.WriteLine($"Posting to {cloudUrl}");
 

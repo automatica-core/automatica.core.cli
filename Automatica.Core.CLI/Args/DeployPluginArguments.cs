@@ -15,5 +15,8 @@ namespace Automatica.Core.CLI.Args
 
         [ArgDescription("Define if the old versions should be deleted"), ArgPosition(4), ArgRequired, ArgDefaultValue(true)]
         public bool DeleteOldVersions { get; set; }
+
+        [ArgDescription("Sets the cloud environment for the plugin"), ArgPosition(5), ArgRequired, ArgDefaultValue("develop")]
+        public string CloudEnvironment { get; set; }
     }
 }
