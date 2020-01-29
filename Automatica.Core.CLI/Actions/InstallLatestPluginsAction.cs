@@ -13,7 +13,7 @@ namespace Automatica.Core.CLI.Actions
 {
     internal static class InstallLatestPluginsAction
     {
-        internal async static Task<int> Action(InstallLatestPluginsArgument args)
+        internal static async Task<int> Action(InstallLatestPluginsArgument args)
         {
             if(!Directory.Exists(args.InstallDirectory))
             {
@@ -30,7 +30,7 @@ namespace Automatica.Core.CLI.Actions
                 Directory.CreateDirectory(Path.Combine(args.InstallDirectory, "Rules"));
             }
 
-            var plugins = await GetPluginList(args.ApiKey, args.CloudUrl, args.MinCoreServerVersion);
+            var plugins = await GetPluginList(args.ApiKey, args.CloudUrl, args.MinCoreServerVersion, args.CloudEnvironment);
 
             foreach(var p in plugins)
             {
@@ -43,9 +43,9 @@ namespace Automatica.Core.CLI.Actions
             return 0;
         }
 
-        private static async Task<IList<EF.Models.Plugin>> GetPluginList(string apiKey, string cloudUrl, string minCoreServerVersion)
+        private static async Task<IList<EF.Models.Plugin>> GetPluginList(string apiKey, string cloudUrl, string minCoreServerVersion, string environment)
         {
-            return await GetRequest<IList<EF.Models.Plugin>>($"/webapi/v1/coreCliData/plugins/{minCoreServerVersion}", apiKey, cloudUrl);
+            return await GetRequest<IList<EF.Models.Plugin>>($"/webapi/v1/coreCliData/plugins/{minCoreServerVersion}/{environment}", apiKey, cloudUrl);
         }
 
         private static HttpClient SetupClient()
