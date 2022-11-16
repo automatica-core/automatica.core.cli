@@ -2,7 +2,7 @@
   "profiles": {
     "Automatica.Core.CLI": {
       "commandName": "Project",
-      "commandLineArgs": "deployupdate"
+      "commandLineArgs": "migrate-database -S SQLite -T MariaDB -So \"Data Source=C:\\Users\\patri\\Downloads\\automatica.core.db\" -Ta \"Server=192.168.8.15;User Id=automatica;Password=YeRgJWeDneIOAqyi229y$;Database=automatica_new\""
     }
   }
 }
