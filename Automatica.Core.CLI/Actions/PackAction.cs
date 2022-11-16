@@ -35,11 +35,14 @@ namespace Automatica.Core.CLI.Actions
 
             SetVersionAction.SetVersion(setVersionArgs);
 
-            var nugetUpdateRet = NugetUpdateAction.NugetUpdate(args);
-
-            if(nugetUpdateRet != 0)
+            if (args.UpdateNugetPackages)
             {
-                return nugetUpdateRet;
+                var nugetUpdateRet = NugetUpdateAction.NugetUpdate(args);
+
+                if (nugetUpdateRet != 0)
+                {
+                    return nugetUpdateRet;
+                }
             }
 
             var pubArgs = new PublishArguments();

@@ -19,5 +19,8 @@ namespace Automatica.Core.CLI.Args
 
         [ArgDescription("The cloud url"), ArgPosition(4), ArgRequired]
         public string CloudUrl { get; set; }
+
+        [ArgDescription("The cloud environment"), ArgPosition(5), ArgRequired, ArgDefaultValue("develop")]
+        public string CloudEnvironment { get; set; }
     }
 }

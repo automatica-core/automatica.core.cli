@@ -40,6 +40,13 @@ namespace Automatica.Core.CLI.Actions
 
         internal static PluginManifest GetAutomaticaManifest(string currentDir)
         {
+            if (File.Exists(currentDir))
+            {
+                var fileInfo = new FileInfo(currentDir);
+
+                currentDir = fileInfo.DirectoryName;
+            }
+
             var manifestContent = "";
             var manifestFile = Path.Combine(currentDir, "automatica-manifest.json");
             using (StreamReader reader = new StreamReader(manifestFile))
