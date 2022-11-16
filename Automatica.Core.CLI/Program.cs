@@ -27,6 +27,12 @@ namespace Automatica.Core.CLI
             Environment.Exit(NugetUpdateAction.NugetUpdate(args));
         }
 
+        [ArgActionMethod, ArgShortcut("migrate-database"), ArgDescription("Migrates the database content from source to target")]
+        public void MigrateDatabase(MigrateDatabaseArguments args)
+        {
+            Environment.Exit(MigrateDatabaseAction.MigrateDatabase(args));
+        }
+
         [ArgActionMethod, ArgDescription("Commits and pushes all git repositories found in the current working directory")]
         public void GitCommitPush(GitCommitPushArguments args)
         {

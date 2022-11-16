@@ -40,6 +40,7 @@ namespace Automatica.Core.CLI.Actions
                 }
                 else
                 {
+                    Console.WriteLine($"Copy dependency to target directory {dep}");
                     File.Copy(Path.Combine(args.WorkingDirectory, args.PublishDirectory, dep), Path.Combine(deployDir, dep));
                 }
             }
