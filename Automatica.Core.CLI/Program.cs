@@ -125,6 +125,13 @@ namespace Automatica.Core.CLI
             Environment.Exit(exitCode);
         }
 
+        [ArgActionMethod, ArgDescription("Deploys a docker Automatica.Core update to the cloud")]
+        public async Task DeployDockerUpdate(DeployDockerUpdateArguments args)
+        {
+            var exitCode = await DeployDockerUpdateAction.Action(args);
+            Environment.Exit(exitCode);
+        }
+
         [ArgActionMethod, ArgDescription("Migrates manifest to the latest version")]
         public void MigrateManifest(MigrateManifestArguments args)
         {
