@@ -25,7 +25,7 @@ jobs:
     displayName: install dotnet tools
     inputs:
       targetType: inline
-      script: >-
+      script: |
         dotnet nuget locals all -c
         dotnet tool install setversion-cli --global 
         dotnet tool update setversion-cli -g 
@@ -40,7 +40,7 @@ jobs:
     displayName: Set package version
     inputs:
       targetType: inline
-      script: >-
+      script: |
         cd $(Build.SourcesDirectory)
 
         setversion-cli $(AUTOMATICA_VERSION).$(Build.BuildNumber)
