@@ -17,10 +17,17 @@ jobs:
   - checkout: self
     submodules: true
     fetchTags: false
+      
+  - task: UseDotNet@2
+    displayName: Use .NET Core sdk $(SDK_VERSION)
+    inputs:
+      version: 7.0.100
+      
   - task: UseDotNet@2
     displayName: Use .NET Core sdk $(SDK_VERSION)
     inputs:
       version: $(SDK_VERSION)
+      
   - task: Bash@3
     displayName: install dotnet tools
     inputs:
