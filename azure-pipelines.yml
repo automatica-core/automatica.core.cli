@@ -1,20 +1,12 @@
-# Variable 'MYGET_WRITE_API_KEY' was defined in the Variables tab
-# Variable 'MyGetApiKey' was defined in the Variables tab
-# Variable Group 'automatica.core variables' was defined in the Variables tab
+trigger:
+  - master  
+  - develop
+
 variables:
 - group: automatica.core.8
 - name: BuildParameters.RestoreBuildProjects
   value: '**/*.csproj'
-trigger:
-  branches:
-    include:
-    - refs/heads/develop
-name: $(rev:r)
-resources:
-  repositories:
-  - repository: self
-    type: git
-    ref: refs/heads/develop
+
 jobs:
 - job: Build
   displayName: Agent job 1
