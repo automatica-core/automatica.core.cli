@@ -4,12 +4,10 @@ trigger:
 
 variables:
 - group: automatica.core.8
-- name: BuildParameters.RestoreBuildProjects
-  value: '**/*.csproj'
 
 jobs:
 - job: Build
-  displayName: Agent job 1
+  displayName: Build cli
   cancelTimeoutInMinutes: 1
   pool:
     vmImage: ubuntu-latest
@@ -36,12 +34,12 @@ jobs:
         dotnet nuget locals all -c
         dotnet tool install setversion-cli --global 
         dotnet tool update setversion-cli -g 
+        
   - task: DotNetCoreCLI@2
     displayName: Restore
     inputs:
       command: restore
-      projects: $(BuildParameters.RestoreBuildProjects)
-      selectOrConfig: config
+      projects: '**/*.csproj'
 
   - task: Bash@3
     displayName: Set package version
