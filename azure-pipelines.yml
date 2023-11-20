@@ -43,8 +43,7 @@ jobs:
       script: |
         cd $(Build.SourcesDirectory)
 
-        echo setversion-cli $(AUTOMATICA_VERSION).$(Build.BuildNumber)
-        setversion-cli $(AUTOMATICA_VERSION).$(Build.BuildNumber)
+        setversion-cli $(AUTOMATICA_VERSION).$(Build.BuildId)
         
   - task: DotNetCoreCLI@2
     displayName: Build
