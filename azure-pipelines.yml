@@ -35,8 +35,8 @@ jobs:
       targetType: inline
       script: >-
         dotnet nuget locals all -c
-        dotnet tool install setversion-cli --global  2>/dev/null
-        dotnet tool update setversion-cli -g >/dev/null
+        dotnet tool install setversion-cli --global 
+        dotnet tool update setversion-cli -g 
   - task: DotNetCoreCLI@2
     displayName: Restore
     inputs:
