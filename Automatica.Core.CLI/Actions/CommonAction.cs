@@ -1,5 +1,5 @@
 ﻿using Automatica.Core.CLI.Exceptions;
-using Automatica.Core.Common.Update;
+
 using Newtonsoft.Json;
 using System;
 using System.IO;

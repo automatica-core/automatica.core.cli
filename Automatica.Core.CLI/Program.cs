@@ -159,13 +159,6 @@ namespace Automatica.Core.CLI
             Console.WriteLine($"{NetStandardUtils.Platform.Rid}");
         }
 
-        //[ArgActionMethod, ArgDescription("Runs a Automatica driver or rule project")]
-        //public async Task Run(WorkingDirectoryArguments args)
-        //{
-        //    await RunAction.Run(args.WorkingDirectory);
-        //}
-
-
         [ArgActionMethod, ArgDescription("Installs a plugin in a give directory")]
         public void InstallPlugin(InstallPluginArgs args)
         {
