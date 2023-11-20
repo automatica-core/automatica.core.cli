@@ -35,7 +35,7 @@ jobs:
       command: restore
       projects: $(BuildParameters.RestoreBuildProjects)
       selectOrConfig: config
-      nugetConfigPath: NuGet.config
+
   - task: Bash@3
     displayName: Set package version
     inputs:
