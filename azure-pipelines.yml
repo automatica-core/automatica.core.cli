@@ -1,0 +1,102 @@
+# Variable 'MYGET_WRITE_API_KEY' was defined in the Variables tab
+# Variable 'MyGetApiKey' was defined in the Variables tab
+# Variable Group 'automatica.core variables' was defined in the Variables tab
+variables:
+- group: automatica.core.8
+- name: BuildParameters.RestoreBuildProjects
+  value: '**/*.csproj'
+trigger:
+  branches:
+    include:
+    - refs/heads/develop
+name: $(rev:r)
+resources:
+  repositories:
+  - repository: self
+    type: git
+    ref: refs/heads/develop
+jobs:
+- job: Phase_1
+  displayName: Agent job 1
+  cancelTimeoutInMinutes: 1
+  pool:
+    vmImage: ubuntu-latest
+  steps:
+  - checkout: self
+    submodules: true
+    fetchTags: false
+  - task: DotNetCoreInstaller@0
+    displayName: Use .NET Core sdk 2.2.204
+    enabled: False
+    inputs:
+      version: 2.2.204
+  - task: UseDotNet@2
+    displayName: Use .NET Core sdk $(SDK_VERSION)
+    inputs:
+      version: $(SDK_VERSION)
+  - task: Bash@3
+    displayName: install dotnet tools
+    inputs:
+      targetType: inline
+      script: >-
+        dotnet nuget locals all -c
+
+
+        dotnet tool install setversion-cli --global  2>/dev/null
+
+        dotnet tool update setversion-cli -g >/dev/null
+  - task: DotNetCoreCLI@2
+    displayName: Restore
+    inputs:
+      command: restore
+      projects: $(BuildParameters.RestoreBuildProjects)
+      selectOrConfig: config
+      nugetConfigPath: NuGet.config
+  - task: Bash@3
+    displayName: Set package version
+    inputs:
+      targetType: inline
+      script: >-
+        cd $(Build.SourcesDirectory)
+
+        setversion-cli $(AUTOMATICA_VERSION).$(Build.BuildNumber)
+  - task: DotNetCoreCLI@2
+    displayName: Build
+    inputs:
+      projects: $(BuildParameters.RestoreBuildProjects)
+      arguments: --configuration $(BuildConfiguration)
+  - task: DotNetCoreCLI@2
+    displayName: Test
+    inputs:
+      command: test
+      projects: '**/*[Tt]ests.csproj'
+      arguments: --configuration $(BuildConfiguration)
+  - task: DotNetCoreCLI@2
+    displayName: dotnet pack
+    inputs:
+      command: pack
+      outputDir: '$(Build.ArtifactStagingDirectory)/nuget '
+  - task: Bash@3
+    displayName: Bash Script
+    enabled: False
+    inputs:
+      filePath: automatica.build/publish-nuget.sh
+      arguments: $(Build.ArtifactStagingDirectory)/nuget $(MYGET_WRITE_API_KEY)
+      script: >-
+        # Write your commands here
+
+
+        # Use the environment variables input below to pass secret variables to this script
+  - task: Bash@3
+    displayName: Clear nuget Cache
+    enabled: False
+    inputs:
+      targetType: inline
+      script: dotnet nuget locals all -c
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: drop'
+    inputs:
+      FileCopyOptions: ''
+  - task: 8ea5560a-adc6-4459-91fa-0b560718e9ea@0
+    displayName: Automatica.Core multi-arch docker
+    enabled: False
