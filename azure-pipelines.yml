@@ -19,11 +19,6 @@ jobs:
   - task: UseDotNet@2
     displayName: Use .NET Core sdk $(SDK_VERSION)
     inputs:
-      version: 7.0.100
-      
-  - task: UseDotNet@2
-    displayName: Use .NET Core sdk $(SDK_VERSION)
-    inputs:
       version: $(SDK_VERSION)
       
   - task: Bash@3
@@ -48,18 +43,22 @@ jobs:
       script: |
         cd $(Build.SourcesDirectory)
 
+        echo setversion-cli $(AUTOMATICA_VERSION).$(Build.BuildNumber)
         setversion-cli $(AUTOMATICA_VERSION).$(Build.BuildNumber)
+        
   - task: DotNetCoreCLI@2
     displayName: Build
     inputs:
       projects: $(BuildParameters.RestoreBuildProjects)
       arguments: --configuration $(BuildConfiguration)
+      
   - task: DotNetCoreCLI@2
     displayName: Test
     inputs:
       command: test
       projects: '**/*[Tt]ests.csproj'
       arguments: --configuration $(BuildConfiguration)
+      
   - task: DotNetCoreCLI@2
     displayName: dotnet pack
     inputs:
