@@ -48,7 +48,7 @@ jobs:
   - task: DotNetCoreCLI@2
     displayName: Build
     inputs:
-      projects: $(BuildParameters.RestoreBuildProjects)
+      projects: '**/*.csproj'
       arguments: --configuration $(BuildConfiguration)
       
   - task: DotNetCoreCLI@2
