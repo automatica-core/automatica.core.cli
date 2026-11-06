@@ -32,12 +32,7 @@ namespace Automatica.Core.CLI.Actions
         {
             try
             {
-                var httpClientHandler = new HttpClientHandler
-                {
-                    ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
-                };
-
-                var client = new HttpClient(httpClientHandler);
+                var client = new HttpClient();
 
                 var dockerDto = new ServerDockerVersion
                 {
@@ -51,7 +46,8 @@ namespace Automatica.Core.CLI.Actions
                 };
                 var cloudUrl = $"{args.CloudUrl}/webapi/v1/coreCliData/deployDocker/{args.CloudEnvironment}/{args.ApiKey}";
 
-                Console.WriteLine($"Posting to {cloudUrl}");
+                // never print the url, it contains the api key
+                Console.WriteLine($"Posting docker version {args.Version} to {args.CloudUrl}");
 
                 var response = await client.PostAsync(cloudUrl, new StringContent(JsonConvert.SerializeObject(dockerDto), Encoding.UTF8, "application/json")).ConfigureAwait(false);
 
