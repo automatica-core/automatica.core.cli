@@ -51,7 +51,7 @@ namespace Automatica.Core.CLI.Actions
 
                 ZipFile.CreateFromDirectory(publishPath, outFile);
 
-                return 0;
+                return PackageSigning.SignIfConfigured(outFile, PackageSigning.TypeUpdate);
             }
             catch(Exception e)
             {

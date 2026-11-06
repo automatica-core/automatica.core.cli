@@ -112,6 +112,28 @@ namespace Automatica.Core.CLI
             Environment.Exit(exitCode);
         }
 
+        [ArgActionMethod, ArgDescription("Signs a plugin or update package with the key from AUTOMATICA_PACKAGE_SIGNING_KEY / AUTOMATICA_PACKAGE_SIGNING_KEY_FILE")]
+        public void SignPackage(SignPackageArguments args)
+        {
+            if (args.Type != PackageSigning.TypePlugin && args.Type != PackageSigning.TypeUpdate)
+            {
+                Console.Error.WriteLine("Type must be plugin or update");
+                Environment.Exit(-1);
+            }
+            if (PackageSigning.LoadKey() == null)
+            {
+                Console.Error.WriteLine($"No signing key, set {PackageSigning.KeyEnv} or {PackageSigning.KeyFileEnv}");
+                Environment.Exit(-1);
+            }
+            Environment.Exit(PackageSigning.SignIfConfigured(args.File, args.Type));
+        }
+
+        [ArgActionMethod, ArgDescription("Generates a new package signing key pair (ECDSA P-256)")]
+        public void GenerateSigningKey(GenerateSigningKeyArguments args)
+        {
+            Environment.Exit(PackageSigning.GenerateKey(args.PrivateKeyFile));
+        }
+
         [ArgActionMethod, ArgDescription("Packages a Automatica.Core update")]
         public void PackUpdate(PackUpdateArgs args)
         {

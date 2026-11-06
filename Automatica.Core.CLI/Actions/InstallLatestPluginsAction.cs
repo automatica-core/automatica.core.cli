@@ -140,7 +140,7 @@ namespace Automatica.Core.CLI.Actions
                 var installDir = Path.Combine(args.InstallDirectory, p.PluginType == PluginType.Driver ? "Drivers" : "Rules");
 
                 Console.WriteLine($"Download {p.Name} and install to {installDir}");
-                await DownloadAndInstallPlugin(p.AzureUrl, installDir);
+                await DownloadAndInstallPlugin(p.AzureUrl, installDir, p.ComponentName);
             }
 
             return 0;
@@ -153,10 +153,7 @@ namespace Automatica.Core.CLI.Actions
 
         private static HttpClient SetupClient()
         {
-            var httpClientHandler = new HttpClientHandler();
-            httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
-            // Three versions in one.
-            HttpClient client = new HttpClient(httpClientHandler);
+            HttpClient client = new HttpClient();
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -173,7 +170,8 @@ namespace Automatica.Core.CLI.Actions
                 using (var client = SetupClient())
                 {
                     var uri = new Uri(new Uri(cloudUrl), apiUrl + "/" + apiKey);
-                    Console.WriteLine($"Calling {uri}");
+                    // never print the url, it contains the api key
+                    Console.WriteLine($"Calling {cloudUrl}{apiUrl}");
                     var response = await client.GetAsync(uri).ConfigureAwait(false);
 
                     response.EnsureSuccessStatusCode();
@@ -197,8 +195,14 @@ namespace Automatica.Core.CLI.Actions
             return result;
         }
 
-        private static async Task DownloadAndInstallPlugin(string downloadUrl, string installDirectory)
+        private static async Task DownloadAndInstallPlugin(string downloadUrl, string installDirectory, string componentName)
         {
+            if (!Uri.TryCreate(downloadUrl, UriKind.Absolute, out var uri) || uri.Scheme != Uri.UriSchemeHttps)
+            {
+                Console.Error.WriteLine($"Refusing to download {componentName} over a non https url");
+                return;
+            }
+
             var webClient = new WebClient();
             var tmpFile = Path.GetTempFileName();
             try
@@ -217,6 +221,25 @@ namespace Automatica.Core.CLI.Actions
                 File.Delete(tmpFile);
             }
             File.Delete(Path.Combine(installDirectory, "automatica-manifest.json"));
+
+            // the core verifies installed plugins against the signature file in the component directory
+            var signatureFile = Path.Combine(installDirectory, PackageSigning.SignatureFileName);
+            if (File.Exists(signatureFile))
+            {
+                var componentDirectory = Path.Combine(installDirectory, componentName ?? string.Empty);
+                if (!string.IsNullOrEmpty(componentName) && Path.GetFileName(componentName) == componentName && Directory.Exists(componentDirectory))
+                {
+                    File.Move(signatureFile, Path.Combine(componentDirectory, PackageSigning.SignatureFileName), true);
+                }
+                else
+                {
+                    File.Delete(signatureFile);
+                }
+            }
+            else
+            {
+                Console.WriteLine($"##[warning]{componentName} is not signed");
+            }
         }
     }
 }

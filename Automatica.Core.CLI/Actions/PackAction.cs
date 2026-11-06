@@ -85,7 +85,8 @@ namespace Automatica.Core.CLI.Actions
 
             Directory.Delete(publishPath, true);
             Directory.Delete(deployPath, true);
-            return 0;
+
+            return PackageSigning.SignIfConfigured(zipFileName, PackageSigning.TypePlugin);
         }
     }
 }
