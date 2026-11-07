@@ -21,15 +21,6 @@ jobs:
     inputs:
       version: $(SDK_VERSION)
       
-  - task: Bash@3
-    displayName: install dotnet tools
-    inputs:
-      targetType: inline
-      script: |
-        dotnet nuget locals all -c
-        dotnet tool install setversion-cli --global 
-        dotnet tool update setversion-cli -g 
-        
   - task: DotNetCoreCLI@2
     displayName: Restore
     inputs:
@@ -41,9 +32,12 @@ jobs:
     inputs:
       targetType: inline
       script: |
+        set -e
         cd $(Build.SourcesDirectory)
-
-        setversion-cli $(AUTOMATICA_VERSION).$(Build.BuildId)
+        # setversion-cli parses a semantic version (3 parts) and rejects 10.0.0.<build id>
+        version="$(AUTOMATICA_VERSION).$(Build.BuildId)"
+        sed -i -E "s#<(Version|PackageVersion|AssemblyVersion|FileVersion)>[^<]*</#<\1>${version}</#g" Automatica.Core.CLI/Automatica.Core.CLI.csproj
+        grep -E "<(Version|PackageVersion)>" Automatica.Core.CLI/Automatica.Core.CLI.csproj
         
   - task: DotNetCoreCLI@2
     displayName: Build
