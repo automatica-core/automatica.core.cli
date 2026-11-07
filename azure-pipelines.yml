@@ -35,7 +35,10 @@ jobs:
         set -e
         cd $(Build.SourcesDirectory)
         # setversion-cli parses a semantic version (3 parts) and rejects 10.0.0.<build id>
-        version="$(AUTOMATICA_VERSION).$(Build.BuildId)"
+        # three parts (10.0.<build id>) like the published 10.0.17627: 10.0.0.<build id> would sort below it,
+        # so "dotnet tool update automatica-cli" in the plugin builds would keep the old cli
+        automatica_version="$(AUTOMATICA_VERSION)"
+        version="${automatica_version%.*}.$(Build.BuildId)"
         sed -i -E "s#<(Version|PackageVersion|AssemblyVersion|FileVersion)>[^<]*</#<\1>${version}</#g" Automatica.Core.CLI/Automatica.Core.CLI.csproj
         grep -E "<(Version|PackageVersion)>" Automatica.Core.CLI/Automatica.Core.CLI.csproj
         
