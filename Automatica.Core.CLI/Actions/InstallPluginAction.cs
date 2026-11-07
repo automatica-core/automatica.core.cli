@@ -40,6 +40,13 @@ namespace Automatica.Core.CLI.Actions
 
                     File.Copy(file, Path.Combine(args.InstallDirectory, fileInfo.Name));
                 }
+
+                // the core verifies installed plugins against the signature file
+                var signatureFile = Path.Combine(tmpDirectory, PackageSigning.SignatureFileName);
+                if (File.Exists(signatureFile))
+                {
+                    File.Copy(signatureFile, Path.Combine(args.InstallDirectory, PackageSigning.SignatureFileName), true);
+                }
             }
             else
             {

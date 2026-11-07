@@ -49,6 +49,7 @@ namespace Automatica.Core.CLI.Actions
             pubArgs.Configuration = args.Configuration;
             pubArgs.OutputDirectory = publishPath;
             pubArgs.WorkingDirectory = args.WorkingDirectory;
+            pubArgs.Rid = args.Rid;
 
             var pubArgsRet = PublishAction.Publish(pubArgs);
             if (pubArgsRet != 0)
@@ -84,7 +85,8 @@ namespace Automatica.Core.CLI.Actions
 
             Directory.Delete(publishPath, true);
             Directory.Delete(deployPath, true);
-            return 0;
+
+            return PackageSigning.SignIfConfigured(zipFileName, PackageSigning.TypePlugin);
         }
     }
 }

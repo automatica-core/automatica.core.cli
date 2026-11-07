@@ -1,0 +1,70 @@
+trigger:
+  - master  
+  - develop
+
+variables:
+- group: automatica.core.8
+
+jobs:
+- job: Build
+  displayName: Build cli
+  cancelTimeoutInMinutes: 1
+  pool:
+    vmImage: ubuntu-latest
+  steps:
+  - checkout: self
+    submodules: true
+    fetchTags: false
+      
+  - task: UseDotNet@2
+    displayName: Use .NET Core sdk $(SDK_VERSION)
+    inputs:
+      version: $(SDK_VERSION)
+      
+  - task: Bash@3
+    displayName: install dotnet tools
+    inputs:
+      targetType: inline
+      script: |
+        dotnet nuget locals all -c
+        dotnet tool install setversion-cli --global 
+        dotnet tool update setversion-cli -g 
+        
+  - task: DotNetCoreCLI@2
+    displayName: Restore
+    inputs:
+      command: restore
+      projects: '**/*.csproj'
+
+  - task: Bash@3
+    displayName: Set package version
+    inputs:
+      targetType: inline
+      script: |
+        cd $(Build.SourcesDirectory)
+
+        setversion-cli $(AUTOMATICA_VERSION).$(Build.BuildId)
+        
+  - task: DotNetCoreCLI@2
+    displayName: Build
+    inputs:
+      projects: '**/*.csproj'
+      arguments: --configuration $(BuildConfiguration)
+      
+  - task: DotNetCoreCLI@2
+    displayName: Test
+    inputs:
+      command: test
+      projects: '**/*[Tt]ests.csproj'
+      arguments: --configuration $(BuildConfiguration)
+      
+  - task: DotNetCoreCLI@2
+    displayName: dotnet pack
+    inputs:
+      command: pack
+      outputDir: '$(Build.ArtifactStagingDirectory)/nuget '
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: drop'
+    inputs:
+      ArtifactName: 'drop'

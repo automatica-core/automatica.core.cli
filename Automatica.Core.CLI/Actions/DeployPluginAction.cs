@@ -32,6 +32,13 @@ namespace Automatica.Core.CLI.Actions
                 }
             }
             args.File = uploadFile;
+
+            // packages are signed when they are packed, sign here if that did not happen (no key at pack time)
+            var signRet = PackageSigning.SignIfConfigured(args.File, PackageSigning.TypePlugin);
+            if (signRet != 0)
+            {
+                return signRet;
+            }
             return await SendFile(args);
         }
 
@@ -43,15 +50,14 @@ namespace Automatica.Core.CLI.Actions
 
                 MultipartFormDataContent multiContent = new MultipartFormDataContent();
 
-                var httpClientHandler = new HttpClientHandler();
-                httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
-                var client = new HttpClient(httpClientHandler);
+                var client = new HttpClient();
 
                 var payload = await File.ReadAllBytesAsync(args.File);
                 multiContent.Add(new ByteArrayContent(payload), "files", args.File); // name must be "files"
                 var cloudUrl = $"{args.CloudUrl}/webapi/v1/coreCliData/deployPlugin/{args.DeleteOldVersions}/{args.CloudEnvironment}/{args.ApiKey}";
 
-                Console.WriteLine($"Posting to {cloudUrl}");
+                // never print the url, it contains the api key
+                Console.WriteLine($"Posting {args.File} to {args.CloudUrl}");
 
                 var response = await client.PostAsync(cloudUrl, multiContent).ConfigureAwait(false);
 

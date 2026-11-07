@@ -7,6 +7,9 @@ namespace Automatica.Core.CLI.Args
         [ArgRequired, ArgDescription("The package version")]
         public string Version { get; set; }
 
+        [ArgDescription("The rid to build")]
+        public string Rid { get; set; }
+
         [ArgDescription("The package configuration"), ArgDefaultValue("Release")]
         public string Configuration { get; set; }
 
